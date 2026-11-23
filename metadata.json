@@ -1,0 +1,10 @@
+{
+  "name": "Remix R TAXI",
+  "description": "Butun O\u0027zbekiston bo\u0027ylab zamonaviy yo\u0027lovchi taksi xizmati. Bolt uslubidagi qorong\u0027u interfeys va avtomatik narx hisoblash.",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,114 @@
+{
+  "entities": {
+    "Order": {
+      "title": "Order",
+      "description": "Passenger taxi order submitted to Firestore orders collection",
+      "type": "object",
+      "properties": {
+        "mijozIsmi": {
+          "type": "string",
+          "maxLength": 120,
+          "description": "Passenger name"
+        },
+        "mijozTelefoni": {
+          "type": "string",
+          "maxLength": 40,
+          "description": "Passenger phone number"
+        },
+        "qayerdan": {
+          "type": "string",
+          "maxLength": 300,
+          "description": "Pickup address"
+        },
+        "qayerga": {
+          "type": "string",
+          "maxLength": 300,
+          "description": "Destination address"
+        },
+        "qayerdanLat": {
+          "type": "number",
+          "description": "Pickup latitude"
+        },
+        "qayerdanLng": {
+          "type": "number",
+          "description": "Pickup longitude"
+        },
+        "qayergaLat": {
+          "type": "number",
+          "description": "Destination latitude"
+        },
+        "qayergaLng": {
+          "type": "number",
+          "description": "Destination longitude"
+        },
+        "narxi": {
+          "type": "number",
+          "description": "Calculated trip price in UZS"
+        },
+        "masofasi": {
+          "type": "number",
+          "description": "Trip distance in km"
+        },
+        "tarif": {
+          "type": "string",
+          "enum": ["start", "comfort", "business"],
+          "maxLength": 20,
+          "description": "Selected tariff"
+        },
+        "tolovTuri": {
+          "type": "string",
+          "enum": ["cash", "uzcard", "wallet"],
+          "maxLength": 20,
+          "description": "Payment method"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["Kutilmoqda", "Qabul qilindi", "Yakunlandi", "Bekor qilindi"],
+          "maxLength": 30,
+          "description": "Current order status"
+        },
+        "driver": {
+          "type": "string",
+          "maxLength": 120,
+          "description": "Assigned driver name or Biriktirilmagan"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server update timestamp"
+        }
+      },
+      "required": [
+        "mijozIsmi",
+        "mijozTelefoni",
+        "qayerdan",
+        "qayerga",
+        "qayerdanLat",
+        "qayerdanLng",
+        "qayergaLat",
+        "qayergaLng",
+        "narxi",
+        "masofasi",
+        "tarif",
+        "tolovTuri",
+        "status",
+        "driver",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/orders/{orderId}": {
+      "schema": {
+        "$ref": "#/entities/Order"
+      },
+      "description": "Taxi orders submitted by passengers"
+    }
+  }
+}

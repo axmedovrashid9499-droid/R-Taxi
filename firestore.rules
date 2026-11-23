@@ -1,0 +1,108 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Safety Net (Default Deny)
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidOrder(data) {
+      return data.keys().hasAll([
+          'mijozIsmi',
+          'mijozTelefoni',
+          'qayerdan',
+          'qayerga',
+          'qayerdanLat',
+          'qayerdanLng',
+          'qayergaLat',
+          'qayergaLng',
+          'narxi',
+          'masofasi',
+          'tarif',
+          'tolovTuri',
+          'status',
+          'driver',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'mijozIsmi',
+          'mijozTelefoni',
+          'qayerdan',
+          'qayerga',
+          'qayerdanLat',
+          'qayerdanLng',
+          'qayergaLat',
+          'qayergaLng',
+          'narxi',
+          'masofasi',
+          'tarif',
+          'tolovTuri',
+          'status',
+          'driver',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.mijozIsmi is string && data.mijozIsmi.size() > 0 && data.mijozIsmi.size() <= 120
+        && data.mijozTelefoni is string && data.mijozTelefoni.size() > 0 && data.mijozTelefoni.size() <= 40
+        && data.qayerdan is string && data.qayerdan.size() > 0 && data.qayerdan.size() <= 300
+        && data.qayerga is string && data.qayerga.size() > 0 && data.qayerga.size() <= 300
+        && data.qayerdanLat is number && data.qayerdanLat >= -90 && data.qayerdanLat <= 90
+        && data.qayerdanLng is number && data.qayerdanLng >= -180 && data.qayerdanLng <= 180
+        && data.qayergaLat is number && data.qayergaLat >= -90 && data.qayergaLat <= 90
+        && data.qayergaLng is number && data.qayergaLng >= -180 && data.qayergaLng <= 180
+        && data.narxi is number && data.narxi >= 0 && data.narxi <= 50000000
+        && data.masofasi is number && data.masofasi >= 0 && data.masofasi <= 5000
+        && data.tarif is string && data.tarif.size() <= 20 && data.tarif in ['start', 'comfort', 'business']
+        && data.tolovTuri is string && data.tolovTuri.size() <= 20 && data.tolovTuri in ['cash', 'uzcard', 'wallet']
+        && data.status is string && data.status.size() <= 30 && data.status in ['Kutilmoqda', 'Qabul qilindi', 'Yakunlandi', 'Bekor qilindi']
+        && data.driver is string && data.driver.size() > 0 && data.driver.size() <= 120
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    // Boot-time connection check document (read-only ping)
+    match /test/connection {
+      allow get: if true;
+      allow list, write: if false;
+    }
+
+    match /orders/{orderId} {
+      // Single-order lookup by exact unguessable orderId; list queries strictly forbidden
+      allow get: if isValidId(orderId);
+      allow list: if false;
+
+      // Passenger order creation: enforces initial status 'Kutilmoqda' and driver 'Biriktirilmagan'
+      allow create: if isValidId(orderId)
+        && isValidOrder(incoming())
+        && incoming().status == 'Kutilmoqda'
+        && incoming().driver == 'Biriktirilmagan'
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+
+      // Action-based status transitions (Cancel or Complete) from non-terminal states
+      allow update: if isValidId(orderId)
+        && isValidOrder(incoming())
+        && existing().status in ['Kutilmoqda', 'Qabul qilindi']
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && incoming().diff(existing()).affectedKeys().hasOnly(['status', 'updatedAt'])
+        && incoming().status in ['Bekor qilindi', 'Yakunlandi'];
+
+      allow delete: if false;
+    }
+  }
+}
