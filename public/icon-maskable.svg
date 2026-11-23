@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="rtaxiMaskBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+  </defs>
+
+  <!-- Full-bleed background for maskable & Apple touch icon -->
+  <rect x="0" y="0" width="512" height="512" fill="url(#rtaxiMaskBg)" />
+
+  <!-- Centered inside 80% safe zone (scale 0.76 around center) -->
+  <g transform="translate(256 256) scale(0.76) translate(-256 -256)">
+    <!-- Taxi roof sign -->
+    <rect x="210" y="88" width="92" height="30" rx="10" fill="#ffffff" />
+    <rect x="224" y="97" width="16" height="12" rx="2" fill="#059669" />
+    <rect x="248" y="97" width="16" height="12" rx="2" fill="#059669" />
+    <rect x="272" y="97" width="16" height="12" rx="2" fill="#059669" />
+
+    <!-- Modern taxi car -->
+    <path
+      d="M150 201 L178 134 C184 122 196 116 210 116 L302 116 C316 116 328 122 334 134 L362 201 L380 208 C394 214 402 226 402 242 L402 280 C402 292 393 302 380 302 L364 302 L364 318 C364 329 355 338 344 338 L322 338 C311 338 302 329 302 318 L302 302 L210 302 L210 318 C210 329 201 338 190 338 L168 338 C157 338 148 329 148 318 L148 302 L132 302 C119 302 110 292 110 280 L110 242 C110 226 118 214 132 208 Z"
+      fill="#ffffff"
+    />
+
+    <!-- Windshield -->
+    <path
+      d="M192 136 L320 136 C325 136 329 139 331 144 L348 192 L164 192 L181 144 C183 139 187 136 192 136 Z"
+      fill="#059669"
+    />
+
+    <!-- Headlights & Grille -->
+    <rect x="132" y="228" width="46" height="22" rx="11" fill="#10b981" />
+    <rect x="334" y="228" width="46" height="22" rx="11" fill="#10b981" />
+    <rect x="210" y="234" width="92" height="22" rx="11" fill="#047857" />
+
+    <!-- White "R TAXI" brand wordmark -->
+    <text
+      x="256"
+      y="432"
+      text-anchor="middle"
+      fill="#ffffff"
+      font-family="Arial, Helvetica, sans-serif"
+      font-weight="900"
+      font-size="78"
+      letter-spacing="4"
+    >R TAXI</text>
+  </g>
+</svg>
